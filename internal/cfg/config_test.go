@@ -48,7 +48,7 @@ RETRY_DELAY=10
 		t.Fatal(err)
 	}
 
-	t.Setenv("NOTIFYBRIDGE_CONF", path)
+	t.Setenv("DEVBRIDGE_CONF", path)
 
 	c, err := Load()
 	if err != nil {
@@ -89,7 +89,7 @@ func TestLoadDefaults(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Setenv("NOTIFYBRIDGE_CONF", path)
+	t.Setenv("DEVBRIDGE_CONF", path)
 
 	c, err := Load()
 	if err != nil {
@@ -126,7 +126,7 @@ func TestWriteAndLoad(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Setenv("NOTIFYBRIDGE_CONF", path)
+	t.Setenv("DEVBRIDGE_CONF", path)
 
 	loaded, err := Load()
 	if err != nil {
