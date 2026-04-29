@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# NotifyBridge - macOS Setup
+# DevBridge - macOS Setup
 # Run this once on your Mac
 
 set -e
@@ -16,14 +16,14 @@ err()  { echo -e "${RED}[ERROR]${NC} $1"; }
 
 echo ""
 echo "=============================="
-echo "  NotifyBridge - Mac Setup"
+echo "  DevBridge - Mac Setup"
 echo "=============================="
 echo ""
 
 # 1. Check SSH key
 if [ ! -f ~/.ssh/id_ed25519 ]; then
     info "Generating SSH key..."
-    ssh-keygen -t ed25519 -C "notifybridge@mac" -f ~/.ssh/id_ed25519 -N ""
+    ssh-keygen -t ed25519 -C "devbridge@mac" -f ~/.ssh/id_ed25519 -N ""
     ok "SSH key generated"
 else
     ok "SSH key exists at ~/.ssh/id_ed25519"
@@ -43,11 +43,11 @@ if command -v tailscale &>/dev/null; then
 fi
 
 # 4. Create config
-CONF="$HOME/.notifybridge.conf"
+CONF="$HOME/.devbridge.conf"
 if [ -f "$CONF" ]; then
     ok "Config exists at $CONF"
 else
-    cp "$SCRIPT_DIR/notifybridge.conf.example" "$CONF"
+    cp "$SCRIPT_DIR/devbridge.conf.example" "$CONF"
 
     if [ -n "$ANDROID_IP" ]; then
         sed -i '' "s/ANDROID_IP=\"100.115.83.120\"/ANDROID_IP=\"$ANDROID_IP\"/" "$CONF"
@@ -81,7 +81,7 @@ if ssh -o ConnectTimeout=5 \
     ok "SSH connection works!"
     echo ""
     info "Sending test notification..."
-    notify "NotifyBridge is working!"
+    notify "DevBridge is working!"
     ok "Check your Android device for the notification"
 else
     err "SSH connection failed. Make sure:"

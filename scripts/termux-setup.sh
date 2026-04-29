@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# NotifyBridge - Termux (Android) Setup
+# DevBridge - Termux (Android) Setup
 # Run this ONCE on your Android/Termux device
 
 set -e
@@ -17,7 +17,7 @@ err()   { echo -e "${RED}[ERROR]${NC} $1"; }
 
 echo ""
 echo "=============================="
-echo "  NotifyBridge - Termux Setup"
+echo "  DevBridge - Termux Setup"
 echo "=============================="
 echo ""
 
@@ -104,7 +104,7 @@ termux-wake-lock
 ok "Wake lock active (SSH stays alive with screen off)"
 
 # 10. Boot script
-BOOT_SCRIPT=~/.termux/boot/notifybridge-sshd.sh
+BOOT_SCRIPT=~/.termux/boot/devbridge-sshd.sh
 mkdir -p ~/.termux/boot
 cat > "$BOOT_SCRIPT" << 'BOOT'
 #!/data/data/com.termux/files/usr/bin/bash
@@ -130,7 +130,7 @@ echo "=============================="
 ok "Termux setup complete!"
 echo ""
 echo "Next steps on Mac:"
-echo "  1. cp notifybridge.conf.example ~/.notifybridge.conf"
-echo "  2. Edit ANDROID_IP in ~/.notifybridge.conf"
+echo "  1. cp devbridge.conf.example ~/.devbridge.conf"
+echo "  2. Edit ANDROID_IP in ~/.devbridge.conf"
 echo "  3. Run: notify 'Hello from Mac!'"
 echo ""
