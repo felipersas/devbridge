@@ -1,4 +1,4 @@
-# NotifyBridge
+# DevBridge
 
 Send notifications from macOS to Android via SSH/Tailscale. Built for Claude Code hooks, terminal workflows, and remote development.
 
@@ -21,10 +21,10 @@ make build
 make install
 
 # Pair with your Android phone (shows QR code)
-notifybridge pair
+devbridge pair
 
 # Send a test notification
-notifybridge send "Hello from Mac!"
+devbridge send "Hello from Mac!"
 ```
 
 ## Installation
@@ -32,8 +32,8 @@ notifybridge send "Hello from Mac!"
 ### From source
 
 ```bash
-git clone https://github.com/felipersas/notifybridge.git
-cd notifybridge
+git clone https://github.com/felipersas/devbridge.git
+cd devbridge
 make build
 make install   # copies to /usr/local/bin
 ```
@@ -41,7 +41,7 @@ make install   # copies to /usr/local/bin
 ### With Go
 
 ```bash
-go install github.com/felipersas/notifybridge/cmd/notifybridge@latest
+go install github.com/felipersas/devbridge/cmd/devbridge@latest
 ```
 
 ## Requirements
@@ -52,9 +52,9 @@ go install github.com/felipersas/notifybridge/cmd/notifybridge@latest
 
 ## Configuration
 
-### `~/.notifybridge.conf`
+### `~/.devbridge.conf`
 
-Main configuration file (created by `notifybridge pair` or `notifybridge setup`):
+Main configuration file (created by `devbridge pair` or `devbridge setup`):
 
 ```bash
 # Tailscale IP of the Android device
@@ -82,9 +82,9 @@ MAX_RETRIES=2
 RETRY_DELAY=3
 ```
 
-Set `NOTIFYBRIDGE_CONF` to override config file path.
+Set `DEVBRIDGE_CONF` to override config file path.
 
-### `~/.notifybridge-projects.conf`
+### `~/.devbridge-projects.conf`
 
 Per-project notification styling:
 
@@ -103,7 +103,7 @@ licespot-api=🛒:4CAF50:high
 AWS=☁️:FF9800:default
 ```
 
-Set `NOTIFYBRIDGE_PROJECTS` to override projects file path.
+Set `DEVBRIDGE_PROJECTS` to override projects file path.
 
 ## Claude Code Hook Setup
 
@@ -114,7 +114,7 @@ Add to `.claude/hooks.json` in your project:
   "hooks": {
     "Stop": [{
       "type": "command",
-      "command": "notifybridge hook"
+      "command": "devbridge hook"
     }]
   }
 }
@@ -129,13 +129,13 @@ When Claude Code finishes a task, you get a notification on your phone with:
 
 | Command | Description |
 |---------|-------------|
-| `notifybridge send MSG` | Send a notification |
-| `notifybridge hook` | Claude Code hook (reads JSON from stdin) |
-| `notifybridge pair` | Pair with Android via QR code |
-| `notifybridge setup` | Interactive setup wizard |
-| `notifybridge test` | Test connectivity to Android |
-| `notifybridge config show` | Show current configuration |
-| `notifybridge version` | Print version |
+| `devbridge send MSG` | Send a notification |
+| `devbridge hook` | Claude Code hook (reads JSON from stdin) |
+| `devbridge pair` | Pair with Android via QR code |
+| `devbridge setup` | Interactive setup wizard |
+| `devbridge test` | Test connectivity to Android |
+| `devbridge config show` | Show current configuration |
+| `devbridge version` | Print version |
 
 ### `send` flags
 
@@ -150,7 +150,7 @@ When Claude Code finishes a task, you get a notification on your phone with:
 
 ## Pairing Flow
 
-1. Run `notifybridge pair` on Mac — shows a QR code
+1. Run `devbridge pair` on Mac — shows a QR code
 2. Scan QR on phone (or open URL in Termux browser)
 3. Run the displayed `curl ... | bash` command in Termux
 4. Termux installs openssh, termux-api, generates SSH keys, starts sshd
@@ -174,7 +174,7 @@ Claude Code Hook ──> hook.Run() ──> profile.Match() + notify.SSHNotifier
 
 | Package | Purpose |
 |---------|---------|
-| `cmd/notifybridge` | CLI entry point (cobra) |
+| `cmd/devbridge` | CLI entry point (cobra) |
 | `internal/cfg` | Configuration loading and saving |
 | `internal/profile` | Project profile matching |
 | `internal/notify` | SSH notification delivery with retry |
