@@ -17,7 +17,6 @@ func Run() error {
 // RunWithFS accepts a remove function for testing.
 func RunWithFS(removeFn func(string) error) error {
 	var removed []string
-	var errors []string
 
 	// Config file
 	confPath, err := cfg.Path()
@@ -57,12 +56,6 @@ func RunWithFS(removeFn func(string) error) error {
 	fmt.Println()
 	for _, f := range removed {
 		fmt.Printf("  Removed: %s\n", f)
-	}
-	if len(errors) > 0 {
-		fmt.Println()
-		for _, e := range errors {
-			fmt.Printf("  Warning: %s\n", e)
-		}
 	}
 	fmt.Println()
 	fmt.Println("  Pair again with: devbridge pair")
