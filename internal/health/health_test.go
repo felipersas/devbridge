@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/cfg"
 )
 
 func TestCheck_SSHSuccess_TermuxSuccess(t *testing.T) {

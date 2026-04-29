@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/cfg"
 )
 
 // Result holds the outcome of a connectivity check.
@@ -48,7 +48,7 @@ func Check(config *cfg.Config, execFn func(name string, args ...string) error) *
 		"-o", "StrictHostKeyChecking=accept-new",
 		"-p", config.SSHPort,
 		addr,
-		"termux-notification --title 'NotifyBridge Test' --content 'Connectivity OK'",
+		"termux-notification --title 'DevBridge Test' --content 'Connectivity OK'",
 	}
 	if err := execFn("ssh", termuxArgs...); err == nil {
 		r.TermuxAvailable = true
