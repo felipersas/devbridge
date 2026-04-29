@@ -15,7 +15,7 @@ import (
 
 	"github.com/mdp/qrterminal"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/cfg"
 )
 
 const defaultPort = 19876
@@ -78,7 +78,7 @@ func RunWithTimeout(timeout time.Duration) error {
 		fmt.Printf("  Paired with %s (%s)\n", phone.DeviceName, phone.IP)
 		path, _ := cfg.Path()
 		fmt.Printf("  Config: %s\n", path)
-		fmt.Println("  Test: notifybridge send \"Hello!\"")
+		fmt.Println("  Test: devbridge send \"Hello!\"")
 		return nil
 
 	case <-time.After(timeout):
@@ -89,7 +89,7 @@ func RunWithTimeout(timeout time.Duration) error {
 
 func showQR(url, token string) {
 	fmt.Println()
-	fmt.Println("  NotifyBridge Pairing")
+	fmt.Println("  DevBridge Pairing")
 	fmt.Println("  ═══════════════════")
 	fmt.Println()
 	qrterminal.Generate(url, qrterminal.L, os.Stdout)
@@ -129,7 +129,7 @@ func handleIndex(ip, token string) http.HandlerFunc {
 		fmt.Fprintf(w, `<!DOCTYPE html>
 <html><head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NotifyBridge Pairing</title>
+<title>DevBridge Pairing</title>
 <style>
 body{font-family:system-ui,sans-serif;max-width:500px;margin:40px auto;padding:0 20px;background:#1a1a2e;color:#e0e0e0}
 h1{color:#00d4ff}
@@ -141,7 +141,7 @@ pre{padding:16px;overflow-x:auto;color:#00ff88;font-size:14px;margin:0}
 .note{color:#888;font-size:0.85em;margin-top:20px}
 </style>
 </head><body>
-<h1>NotifyBridge Pairing</h1>
+<h1>DevBridge Pairing</h1>
 <p>Run this command in <strong>Termux</strong>:</p>
 <div class="cmd-wrap">
 <pre id="cmd">curl -sS http://%s:%d/%s/setup.sh | bash</pre>
@@ -159,11 +159,11 @@ func handleSetup(ip, token string, resultCh chan<- PhoneInfo, pubKey string) htt
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/x-shellscript")
 		fmt.Fprintf(w, `#!/data/data/com.termux/files/usr/bin/bash
-# NotifyBridge Phone Setup
+# DevBridge Phone Setup
 set -e
 
 echo ""
-echo "  NotifyBridge Phone Setup"
+echo "  DevBridge Phone Setup"
 echo "  ════════════════════════"
 echo ""
 
@@ -214,7 +214,7 @@ MAC_USER=$(echo "$RESPONSE" | sed -n 's/.*"mac_user":"\([^"]*\)".*/\1/p')
 
 if [ -n "$MAC_IP" ]; then
     echo "  Saving remote connection..."
-    cat > ~/.notifybridge-remote.conf <<REMOTE_CONF
+    cat > ~/.devbridge-remote.conf <<REMOTE_CONF
 MAC_IP=$MAC_IP
 MAC_SSH_PORT=$MAC_SSH_PORT
 MAC_USER=$MAC_USER
@@ -226,7 +226,7 @@ echo "  Installing claude-remote..."
 cat > $PREFIX/bin/claude-remote <<'REMOTE_SCRIPT'
 #!/data/data/com.termux/files/usr/bin/bash
 # Connect to Claude Code on Mac via SSH+tmux
-source ~/.notifybridge-remote.conf 2>/dev/null || { echo "Run notifybridge pair first"; exit 1; }
+source ~/.devbridge-remote.conf 2>/dev/null || { echo "Run devbridge pair first"; exit 1; }
 
 SSH_OPTS="-o ConnectTimeout=5 -o StrictHostKeyChecking=accept-new"
 SSH_TARGET="${MAC_USER:-$USER}@${MAC_IP}"
@@ -383,7 +383,7 @@ func ensureSSHPubKey() (string, error) {
 	}
 
 	// Generate a dedicated key
-	keyPath := home + "/.ssh/notifybridge_ed25519"
+	keyPath := home + "/.ssh/devbridge_ed25519"
 	cmd := exec.Command("ssh-keygen", "-t", "ed25519", "-N", "", "-f", keyPath, "-q")
 	if err := cmd.Run(); err != nil {
 		return "", fmt.Errorf("ssh-keygen: %w", err)

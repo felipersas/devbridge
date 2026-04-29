@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/cfg"
 )
 
 func TestGenerateToken(t *testing.T) {
@@ -150,8 +150,8 @@ func TestAddAuthorizedKey_CreatesFile(t *testing.T) {
 
 func TestWriteConfig(t *testing.T) {
 	tmpDir := t.TempDir()
-	confPath := filepath.Join(tmpDir, "notifybridge.conf")
-	t.Setenv("NOTIFYBRIDGE_CONF", confPath)
+	confPath := filepath.Join(tmpDir, "devbridge.conf")
+	t.Setenv("DEVBRIDGE_CONF", confPath)
 
 	phone := &PhoneInfo{
 		IP:         "10.0.0.42",
