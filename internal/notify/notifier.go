@@ -16,4 +16,5 @@ type Notification struct {
 type Notifier interface {
 	Send(n Notification) error
 	SendBackground(n Notification)
+	Wait()
 }

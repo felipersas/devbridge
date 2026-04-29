@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/felipersas/devbridge/internal/cfg"
@@ -11,8 +12,9 @@ import (
 
 // SSHNotifier sends notifications via SSH to Termux.
 type SSHNotifier struct {
-	config  *cfg.Config
-	runCmd  func(name string, args ...string) error
+	config *cfg.Config
+	runCmd func(name string, args ...string) error
+	wg     sync.WaitGroup
 }
 
 // NewSSHNotifier creates a new SSH-based notifier.
@@ -30,11 +32,20 @@ func (s *SSHNotifier) Send(n Notification) error {
 	return s.withRetry(cmdStr)
 }
 
-// SendBackground delivers a notification without waiting (fire-and-forget).
+// SendBackground delivers a notification in a goroutine (use Wait to block).
 func (s *SSHNotifier) SendBackground(n Notification) {
 	cmdStr := buildTermuxCommand(n)
 	args := s.sshArgs(cmdStr)
-	go func() { _ = s.runCmd("ssh", args...) }()
+	s.wg.Add(1)
+	go func() {
+		defer s.wg.Done()
+		_ = s.runCmd("ssh", args...)
+	}()
+}
+
+// Wait blocks until all background sends complete.
+func (s *SSHNotifier) Wait() {
+	s.wg.Wait()
 }
 
 func (s *SSHNotifier) sshArgs(cmdStr string) []string {

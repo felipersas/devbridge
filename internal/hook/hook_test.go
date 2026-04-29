@@ -26,6 +26,8 @@ func (s *stubNotifier) SendBackground(n notify.Notification) {
 	s.last = n
 }
 
+func (s *stubNotifier) Wait() {}
+
 func writeTestConfig(t *testing.T, tmpDir string) {
 	t.Helper()
 	confContent := `ANDROID_IP="10.0.0.1"

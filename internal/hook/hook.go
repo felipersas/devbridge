@@ -66,6 +66,7 @@ func RunWith(r io.Reader, config *cfg.Config, n notify.Notifier) error {
 		Sound:       config.Sound,
 		TmuxSession: tmuxSession(),
 	})
+	n.Wait()
 
 	return nil
 }
