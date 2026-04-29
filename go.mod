@@ -1,4 +1,4 @@
-module github.com/felipersas/notifybridge
+module github.com/felipersas/devbridge
 
 go 1.23
 
