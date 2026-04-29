@@ -1,0 +1,25 @@
+# NotifyBridge Configuration
+
+# Tailscale IP of the Android device
+ANDROID_IP="100.115.83.120"
+
+# SSH user on Termux
+SSH_USER="root"
+
+# SSH port (Termux sshd default)
+SSH_PORT="8022"
+
+# Default notification title
+DEFAULT_TITLE="Mac Remote"
+
+# Sound on notification
+SOUND=true
+
+# Notification priority
+PRIORITY="high"
+
+# Max retry attempts
+MAX_RETRIES=2
+
+# Retry delay in seconds
+RETRY_DELAY=3

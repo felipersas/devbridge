@@ -1,0 +1,15 @@
+# NotifyBridge Project Profiles
+# Format: DIR_NAME=EMOJI:LED_COLOR:PRIORITY
+# LED_COLOR: hex without # (FF0000=red, 4CAF50=green, etc)
+# PRIORITY: high|default|low|max|min
+#
+# Unmatched projects use the default profile below.
+
+# Default (fallback)
+DEFAULT=⚡:2196F3:high
+
+# Projects
+Termux=🔧:2196F3:high
+licespot-web=🛒:4CAF50:high
+licespot-api=🛒:4CAF50:high
+AWS=☁️:FF9800:default
