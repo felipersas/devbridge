@@ -1,4 +1,4 @@
-# NotifyBridge Project Profiles
+# DevBridge Project Profiles
 # Format: DIR_NAME=EMOJI:LED_COLOR:PRIORITY
 # LED_COLOR: hex without # (FF0000=red, 4CAF50=green, etc)
 # PRIORITY: high|default|low|max|min

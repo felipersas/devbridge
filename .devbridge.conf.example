@@ -1,4 +1,4 @@
-# NotifyBridge Configuration
+# DevBridge Configuration
 
 # Tailscale IP of the Android device
 ANDROID_IP="100.115.83.120"
