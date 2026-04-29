@@ -4,13 +4,13 @@ LDFLAGS := -ldflags "-X main.version=$(VERSION)"
 .PHONY: build install test clean
 
 build:
-	go build $(LDFLAGS) -o notifybridge ./cmd/notifybridge
+	go build $(LDFLAGS) -o devbridge ./cmd/devbridge
 
 install: build
-	cp notifybridge /usr/local/bin/
+	cp devbridge /usr/local/bin/
 
 test:
 	go test -race ./...
 
 clean:
-	rm -f notifybridge
+	rm -f devbridge
