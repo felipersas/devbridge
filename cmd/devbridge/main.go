@@ -13,6 +13,7 @@ import (
 	"github.com/felipersas/devbridge/internal/notify"
 	"github.com/felipersas/devbridge/internal/pair"
 	"github.com/felipersas/devbridge/internal/setup"
+	"github.com/felipersas/devbridge/internal/unpair"
 )
 
 var version = "dev"
@@ -32,7 +33,10 @@ func main() {
 		Short: "Send notifications from Mac to Android via SSH/Tailscale",
 	}
 
-	rootCmd.AddCommand(sendCmd(), hookCmd(), pairCmd(), setupCmd(), testCmd(), configCmd(), versionCmd())
+	rootCmd.AddCommand(
+		sendCmd(), hookCmd(), pairCmd(), unpairCmd(),
+		setupCmd(), testCmd(), configCmd(), versionCmd(), completionCmd(),
+	)
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
@@ -186,6 +190,57 @@ func versionCmd() *cobra.Command {
 		Short: "Print version",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Printf("devbridge %s\n", version)
+		},
+	}
+}
+
+func unpairCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "unpair",
+		Short: "Remove pairing configuration and SSH keys",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return unpair.Run()
+		},
+	}
+}
+
+func completionCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "completion [bash|zsh|fish|powershell]",
+		Short: "Generate shell completion script",
+		Long: `Generate shell completion script for devbridge.
+
+Load completions:
+
+  Bash:
+    devbridge completion bash > /etc/bash_completion.d/devbridge
+
+  Zsh:
+    devbridge completion zsh > "${fpath[1]}/_devbridge"
+
+  Fish:
+    devbridge completion fish > ~/.config/fish/completions/devbridge.fish
+
+  PowerShell:
+    devbridge completion powershell | Out-String | Invoke-Expression
+`,
+		DisableFlagsInUseLine: true,
+		ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
+		Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			root := cmd.Root()
+			switch args[0] {
+			case "bash":
+				return root.GenBashCompletion(os.Stdout)
+			case "zsh":
+				return root.GenZshCompletion(os.Stdout)
+			case "fish":
+				return root.GenFishCompletion(os.Stdout, true)
+			case "powershell":
+				return root.GenPowerShellCompletionWithDesc(os.Stdout)
+			default:
+				return fmt.Errorf("unsupported shell: %s", args[0])
+			}
 		},
 	}
 }
