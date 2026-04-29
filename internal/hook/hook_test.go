@@ -179,3 +179,47 @@ func TestRunWith_EmptyCWD(t *testing.T) {
 		t.Errorf("Title = %q, should contain %q", stub.last.Title, expectedDir)
 	}
 }
+
+func TestRunWith_TmuxSessionDetected(t *testing.T) {
+	tmpDir := t.TempDir()
+	writeTestConfig(t, tmpDir)
+	writeTestProjects(t, tmpDir)
+
+	orig := tmuxSession
+	tmuxSession = func() string { return "my-session" }
+	defer func() { tmuxSession = orig }()
+
+	config, _ := cfg.Load()
+	input := `{"cwd": "/home/user/myproject", "last_assistant_message": "done"}`
+	stub := &stubNotifier{}
+
+	err := RunWith(strings.NewReader(input), config, stub)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if stub.last.TmuxSession != "my-session" {
+		t.Errorf("TmuxSession = %q, want %q", stub.last.TmuxSession, "my-session")
+	}
+}
+
+func TestRunWith_NoTmuxSession(t *testing.T) {
+	tmpDir := t.TempDir()
+	writeTestConfig(t, tmpDir)
+	writeTestProjects(t, tmpDir)
+
+	orig := tmuxSession
+	tmuxSession = func() string { return "" }
+	defer func() { tmuxSession = orig }()
+
+	config, _ := cfg.Load()
+	input := `{"cwd": "/home/user/myproject", "last_assistant_message": "done"}`
+	stub := &stubNotifier{}
+
+	err := RunWith(strings.NewReader(input), config, stub)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if stub.last.TmuxSession != "" {
+		t.Errorf("TmuxSession should be empty, got %q", stub.last.TmuxSession)
+	}
+}

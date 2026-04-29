@@ -88,6 +88,11 @@ func buildTermuxCommand(n Notification) string {
 	if n.ID != "" {
 		parts = append(parts, "--id", shellEscape(n.ID))
 	}
+	if n.TmuxSession != "" {
+		action := "claude-remote -s " + shellEscape(n.TmuxSession)
+		parts = append(parts, "--button1", shellEscape("Open Session"))
+		parts = append(parts, "--button1-action", shellEscape(action))
+	}
 	return strings.Join(parts, " ")
 }
 

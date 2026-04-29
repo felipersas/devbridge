@@ -89,3 +89,38 @@ func TestBuildTermuxCommandWithOptional(t *testing.T) {
 		t.Errorf("missing --id, got: %s", cmd)
 	}
 }
+
+func TestBuildTermuxCommandWithTmuxSession(t *testing.T) {
+	n := Notification{
+		Title:       "Test",
+		Message:     "Msg",
+		TmuxSession: "claude",
+		Sound:       true,
+	}
+
+	cmd := buildTermuxCommand(n)
+
+	if !strings.Contains(cmd, "--button1 'Open Session'") {
+		t.Errorf("missing --button1, got: %s", cmd)
+	}
+	if !strings.Contains(cmd, "claude-remote -s ") {
+		t.Errorf("missing claude-remote action, got: %s", cmd)
+	}
+	if !strings.Contains(cmd, "--button1-action") {
+		t.Errorf("missing --button1-action, got: %s", cmd)
+	}
+}
+
+func TestBuildTermuxCommandNoTmuxSession(t *testing.T) {
+	n := Notification{
+		Title:   "Test",
+		Message: "Msg",
+		Sound:   true,
+	}
+
+	cmd := buildTermuxCommand(n)
+
+	if strings.Contains(cmd, "--button1") {
+		t.Errorf("should not contain --button1 without TmuxSession, got: %s", cmd)
+	}
+}

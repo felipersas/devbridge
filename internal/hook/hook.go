@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/felipersas/devbridge/internal/cfg"
 	"github.com/felipersas/devbridge/internal/notify"
@@ -55,14 +57,27 @@ func RunWith(r io.Reader, config *cfg.Config, n notify.Notifier) error {
 	title := fmt.Sprintf("%s Claude Code — %s", p.Emoji, dirName)
 
 	n.SendBackground(notify.Notification{
-		Title:    title,
-		Message:  msg,
-		LEDColor: p.LEDColor,
-		Priority: p.Priority,
-		Group:    "claude-" + dirName,
-		ID:       "claude-" + dirName,
-		Sound:    config.Sound,
+		Title:       title,
+		Message:     msg,
+		LEDColor:    p.LEDColor,
+		Priority:    p.Priority,
+		Group:       "claude-" + dirName,
+		ID:          "claude-" + dirName,
+		Sound:       config.Sound,
+		TmuxSession: tmuxSession(),
 	})
 
 	return nil
+}
+
+// tmuxSession returns the current tmux session name, or empty if not in tmux.
+var tmuxSession = func() string {
+	if os.Getenv("TMUX") == "" {
+		return ""
+	}
+	out, err := exec.Command("tmux", "display-message", "-p", "#S").Output()
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(string(out))
 }
