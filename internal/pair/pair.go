@@ -236,7 +236,7 @@ SSH_CMD="ssh -t $SSH_OPTS -p $SSH_PORT $SSH_TARGET"
 session="claude"
 
 if [ "$1" = "list" ]; then
-    $SSH_CMD "bash -l -c 'tmux list-sessions 2>/dev/null || echo No sessions'"
+    $SSH_CMD "zsh -l -c 'tmux list-sessions 2>/dev/null || echo No sessions'"
     exit 0
 fi
 
@@ -246,7 +246,7 @@ while getopts "s:" opt; do
     esac
 done
 
-$SSH_CMD "bash -l -c 'tmux new-session -A -s $session claude'"
+$SSH_CMD "zsh -l -c 'tmux new-session -A -s $session claude'"
 REMOTE_SCRIPT
 chmod +x $PREFIX/bin/claude-remote
 
