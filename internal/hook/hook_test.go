@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
-	"github.com/felipersas/notifybridge/internal/notify"
+	"github.com/felipersas/devbridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/notify"
 )
 
 type stubNotifier struct {
@@ -37,11 +37,11 @@ PRIORITY="high"
 MAX_RETRIES=1
 RETRY_DELAY=0
 `
-	confPath := filepath.Join(tmpDir, "notifybridge.conf")
+	confPath := filepath.Join(tmpDir, "devbridge.conf")
 	if err := os.WriteFile(confPath, []byte(confContent), 0644); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("NOTIFYBRIDGE_CONF", confPath)
+	t.Setenv("DEVBRIDGE_CONF", confPath)
 }
 
 func writeTestProjects(t *testing.T, tmpDir string) {
@@ -51,7 +51,7 @@ func writeTestProjects(t *testing.T, tmpDir string) {
 	if err := os.WriteFile(projectsPath, []byte(projectsContent), 0644); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("NOTIFYBRIDGE_PROJECTS", projectsPath)
+	t.Setenv("DEVBRIDGE_PROJECTS", projectsPath)
 }
 
 func TestRunWith_ValidInput(t *testing.T) {

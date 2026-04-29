@@ -7,9 +7,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
-	"github.com/felipersas/notifybridge/internal/notify"
-	"github.com/felipersas/notifybridge/internal/profile"
+	"github.com/felipersas/devbridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/notify"
+	"github.com/felipersas/devbridge/internal/profile"
 )
 
 // Input is the JSON payload from Claude Code's Stop hook.
