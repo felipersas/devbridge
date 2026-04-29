@@ -149,7 +149,7 @@ pre{padding:16px;overflow-x:auto;color:#00ff88;font-size:14px;margin:0}
 </div>
 <p class="note">Make sure Tailscale is running on this phone for remote notifications.</p>
 <script>
-function copyCmd(){var t=document.getElementById("cmd").textContent;navigator.clipboard.writeText(t).then(function(){var b=document.querySelector(".copy-btn");b.textContent="Copied!";b.classList.add("copied");setTimeout(function(){b.textContent="Copy";b.classList.remove("copied")},2000)})}
+function copyCmd(){var t=document.getElementById("cmd").textContent;var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");var b=document.querySelector(".copy-btn");b.textContent="Copied!";b.classList.add("copied");setTimeout(function(){b.textContent="Copy";b.classList.remove("copied")},2000)}catch(e){alert("Copy failed. Select and copy manually.")}document.body.removeChild(ta)}
 </script>
 </body></html>`, ip, defaultPort, token)
 	}
