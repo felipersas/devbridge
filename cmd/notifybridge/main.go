@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/felipersas/notifybridge/internal/cfg"
+	"github.com/felipersas/notifybridge/internal/health"
 	"github.com/felipersas/notifybridge/internal/hook"
 	"github.com/felipersas/notifybridge/internal/notify"
 	"github.com/felipersas/notifybridge/internal/pair"
@@ -31,7 +32,7 @@ func main() {
 		Short: "Send notifications from Mac to Android via SSH/Tailscale",
 	}
 
-	rootCmd.AddCommand(sendCmd(), hookCmd(), pairCmd(), setupCmd(), configCmd(), versionCmd())
+	rootCmd.AddCommand(sendCmd(), hookCmd(), pairCmd(), setupCmd(), testCmd(), configCmd(), versionCmd())
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
@@ -106,6 +107,44 @@ func setupCmd() *cobra.Command {
 		Short: "Interactive setup wizard",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return setup.Run()
+		},
+	}
+}
+
+func testCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "test",
+		Short: "Test connectivity to Android device",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			config, err := cfg.Load()
+			if err != nil {
+				return err
+			}
+
+			fmt.Println("NotifyBridge Connectivity Test")
+			fmt.Println("==============================")
+			fmt.Println()
+
+			result := health.Check(config, nil)
+
+			if result.SSHConnected {
+				fmt.Println("  SSH:    connected")
+			} else {
+				fmt.Printf("  SSH:    FAILED (%s)\n", result.ErrorMessage)
+			}
+
+			if result.TermuxAvailable {
+				fmt.Println("  Termux: available")
+			} else if result.SSHConnected {
+				fmt.Println("  Termux: unavailable (install termux-api)")
+			}
+
+			fmt.Println()
+			if !result.SSHConnected || !result.TermuxAvailable {
+				return fmt.Errorf("connectivity check failed")
+			}
+			fmt.Println("  All checks passed!")
+			return nil
 		},
 	}
 }
