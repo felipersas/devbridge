@@ -7,12 +7,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
-	"github.com/felipersas/notifybridge/internal/health"
-	"github.com/felipersas/notifybridge/internal/hook"
-	"github.com/felipersas/notifybridge/internal/notify"
-	"github.com/felipersas/notifybridge/internal/pair"
-	"github.com/felipersas/notifybridge/internal/setup"
+	"github.com/felipersas/devbridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/health"
+	"github.com/felipersas/devbridge/internal/hook"
+	"github.com/felipersas/devbridge/internal/notify"
+	"github.com/felipersas/devbridge/internal/pair"
+	"github.com/felipersas/devbridge/internal/setup"
 )
 
 var version = "dev"
@@ -28,7 +28,7 @@ var (
 
 func main() {
 	rootCmd := &cobra.Command{
-		Use:   "notifybridge",
+		Use:   "devbridge",
 		Short: "Send notifications from Mac to Android via SSH/Tailscale",
 	}
 
@@ -121,7 +121,7 @@ func testCmd() *cobra.Command {
 				return err
 			}
 
-			fmt.Println("NotifyBridge Connectivity Test")
+			fmt.Println("DevBridge Connectivity Test")
 			fmt.Println("==============================")
 			fmt.Println()
 
@@ -185,7 +185,7 @@ func versionCmd() *cobra.Command {
 		Use:   "version",
 		Short: "Print version",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Printf("notifybridge %s\n", version)
+			fmt.Printf("devbridge %s\n", version)
 		},
 	}
 }
