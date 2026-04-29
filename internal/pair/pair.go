@@ -228,9 +228,25 @@ cat > $PREFIX/bin/claude-remote <<'REMOTE_SCRIPT'
 # Connect to Claude Code on Mac via SSH+tmux
 source ~/.notifybridge-remote.conf 2>/dev/null || { echo "Run notifybridge pair first"; exit 1; }
 
-ssh -t -o ConnectTimeout=5 -o StrictHostKeyChecking=accept-new \
-    -p "${MAC_SSH_PORT:-22}" "${MAC_USER:-$USER}@${MAC_IP}" \
-    "bash -l -c 'tmux new-session -A -s claude claude'"
+SSH_OPTS="-o ConnectTimeout=5 -o StrictHostKeyChecking=accept-new"
+SSH_TARGET="${MAC_USER:-$USER}@${MAC_IP}"
+SSH_PORT="${MAC_SSH_PORT:-22}"
+SSH_CMD="ssh -t $SSH_OPTS -p $SSH_PORT $SSH_TARGET"
+
+session="claude"
+
+if [ "$1" = "list" ]; then
+    $SSH_CMD "bash -l -c 'tmux list-sessions 2>/dev/null || echo No sessions'"
+    exit 0
+fi
+
+while getopts "s:" opt; do
+    case $opt in
+        s) session="$OPTARG" ;;
+    esac
+done
+
+$SSH_CMD "bash -l -c 'tmux new-session -A -s $session claude'"
 REMOTE_SCRIPT
 chmod +x $PREFIX/bin/claude-remote
 
