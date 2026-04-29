@@ -100,9 +100,14 @@ func buildTermuxCommand(n Notification) string {
 		parts = append(parts, "--id", shellEscape(n.ID))
 	}
 	if n.TmuxSession != "" {
-		action := "claude-remote -s " + shellEscape(n.TmuxSession)
+		intentURI := "#Intent;" +
+			"action=com.termux.RUN_COMMAND;" +
+			"component=com.termux/com.termux.app.TermuxActivity;" +
+			"S.com.termux.RUN_COMMAND_PATH=/data/data/com.termux/files/usr/bin/claude-remote;" +
+			"S.com.termux.RUN_COMMAND_ARGUMENTS=-s " + n.TmuxSession + ";" +
+			"end"
 		parts = append(parts, "--button1", shellEscape("Open Session"))
-		parts = append(parts, "--button1-action", shellEscape(action))
+		parts = append(parts, "--button1-action", shellEscape(intentURI))
 	}
 	return strings.Join(parts, " ")
 }

@@ -103,8 +103,14 @@ func TestBuildTermuxCommandWithTmuxSession(t *testing.T) {
 	if !strings.Contains(cmd, "--button1 'Open Session'") {
 		t.Errorf("missing --button1, got: %s", cmd)
 	}
-	if !strings.Contains(cmd, "claude-remote -s ") {
-		t.Errorf("missing claude-remote action, got: %s", cmd)
+	if !strings.Contains(cmd, "com.termux.RUN_COMMAND") {
+		t.Errorf("missing RUN_COMMAND intent action, got: %s", cmd)
+	}
+	if !strings.Contains(cmd, "claude-remote") {
+		t.Errorf("missing claude-remote path, got: %s", cmd)
+	}
+	if !strings.Contains(cmd, "-s claude") {
+		t.Errorf("missing session argument, got: %s", cmd)
 	}
 	if !strings.Contains(cmd, "--button1-action") {
 		t.Errorf("missing --button1-action, got: %s", cmd)
