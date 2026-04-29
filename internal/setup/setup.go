@@ -11,19 +11,22 @@ import (
 
 // Run starts the interactive setup wizard.
 func Run() error {
-	reader := bufio.NewReader(os.Stdin)
+	return RunWithReader(bufio.NewReader(os.Stdin))
+}
 
+// RunWithReader accepts an explicit reader for testing.
+func RunWithReader(r *bufio.Reader) error {
 	fmt.Println("NotifyBridge Setup Wizard")
 	fmt.Println("=========================")
 	fmt.Println()
 
 	d := cfg.Default()
 
-	androidIP := ask(reader, "Android Tailscale IP", d.AndroidIP)
-	sshUser := ask(reader, "SSH user", d.SSHUser)
-	sshPort := ask(reader, "SSH port", d.SSHPort)
-	title := ask(reader, "Default notification title", d.DefaultTitle)
-	sound := askBool(reader, "Sound on notification", d.Sound)
+	androidIP := ask(r, "Android Tailscale IP", d.AndroidIP)
+	sshUser := ask(r, "SSH user", d.SSHUser)
+	sshPort := ask(r, "SSH port", d.SSHPort)
+	title := ask(r, "Default notification title", d.DefaultTitle)
+	sound := askBool(r, "Sound on notification", d.Sound)
 
 	c := &cfg.Config{
 		AndroidIP:    androidIP,

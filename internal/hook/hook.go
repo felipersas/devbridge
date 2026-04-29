@@ -22,6 +22,15 @@ const maxMessageLen = 200
 
 // Run reads hook input from r and sends a notification (fire-and-forget).
 func Run(r io.Reader) error {
+	config, err := cfg.Load()
+	if err != nil {
+		return err
+	}
+	return RunWith(r, config, notify.NewSSHNotifier(config))
+}
+
+// RunWith accepts explicit dependencies for testing.
+func RunWith(r io.Reader, config *cfg.Config, n notify.Notifier) error {
 	var input Input
 	if err := json.NewDecoder(r).Decode(&input); err != nil {
 		return fmt.Errorf("parse hook input: %w", err)
@@ -45,13 +54,7 @@ func Run(r io.Reader) error {
 
 	title := fmt.Sprintf("%s Claude Code — %s", p.Emoji, dirName)
 
-	config, err := cfg.Load()
-	if err != nil {
-		return err
-	}
-
-	notifier := notify.NewSSHNotifier(config)
-	notifier.SendBackground(notify.Notification{
+	n.SendBackground(notify.Notification{
 		Title:    title,
 		Message:  msg,
 		LEDColor: p.LEDColor,

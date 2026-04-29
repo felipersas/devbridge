@@ -11,12 +11,17 @@ import (
 
 // SSHNotifier sends notifications via SSH to Termux.
 type SSHNotifier struct {
-	config *cfg.Config
+	config  *cfg.Config
+	runCmd  func(name string, args ...string) error
 }
 
 // NewSSHNotifier creates a new SSH-based notifier.
 func NewSSHNotifier(c *cfg.Config) *SSHNotifier {
-	return &SSHNotifier{config: c}
+	return &SSHNotifier{config: c, runCmd: defaultRunCmd}
+}
+
+func defaultRunCmd(name string, args ...string) error {
+	return exec.Command(name, args...).Run()
 }
 
 // Send delivers a notification synchronously with retries.
@@ -28,20 +33,24 @@ func (s *SSHNotifier) Send(n Notification) error {
 // SendBackground delivers a notification without waiting (fire-and-forget).
 func (s *SSHNotifier) SendBackground(n Notification) {
 	cmdStr := buildTermuxCommand(n)
+	args := s.sshArgs(cmdStr)
+	go func() { _ = s.runCmd("ssh", args...) }()
+}
+
+func (s *SSHNotifier) sshArgs(cmdStr string) []string {
 	addr := fmt.Sprintf("%s@%s", s.config.SSHUser, s.config.AndroidIP)
-	cmd := exec.Command("ssh",
+	return []string{
 		"-o", "ConnectTimeout=5",
 		"-o", "StrictHostKeyChecking=accept-new",
 		"-o", "BatchMode=yes",
 		"-p", s.config.SSHPort,
 		addr,
 		cmdStr,
-	)
-	_ = cmd.Start()
+	}
 }
 
 func (s *SSHNotifier) withRetry(cmdStr string) error {
-	addr := fmt.Sprintf("%s@%s", s.config.SSHUser, s.config.AndroidIP)
+	args := s.sshArgs(cmdStr)
 
 	var lastErr error
 	for attempt := 0; attempt < s.config.MaxRetries; attempt++ {
@@ -49,16 +58,7 @@ func (s *SSHNotifier) withRetry(cmdStr string) error {
 			time.Sleep(time.Duration(s.config.RetryDelay) * time.Second)
 		}
 
-		cmd := exec.Command("ssh",
-			"-o", "ConnectTimeout=5",
-			"-o", "StrictHostKeyChecking=accept-new",
-			"-o", "BatchMode=yes",
-			"-p", s.config.SSHPort,
-			addr,
-			cmdStr,
-		)
-
-		if err := cmd.Run(); err != nil {
+		if err := s.runCmd("ssh", args...); err != nil {
 			lastErr = err
 			continue
 		}

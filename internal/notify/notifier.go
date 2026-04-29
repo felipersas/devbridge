@@ -14,4 +14,5 @@ type Notification struct {
 // Notifier sends notifications.
 type Notifier interface {
 	Send(n Notification) error
+	SendBackground(n Notification)
 }
