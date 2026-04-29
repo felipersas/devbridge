@@ -19,7 +19,7 @@ licespot-web=🛒:4CAF50:high
 		t.Fatal(err)
 	}
 
-	t.Setenv("NOTIFYBRIDGE_PROJECTS", path)
+	t.Setenv("DEVBRIDGE_PROJECTS", path)
 
 	profiles, err := Load()
 	if err != nil {
@@ -57,7 +57,7 @@ licespot-web=🛒:4CAF50:high
 		t.Fatal(err)
 	}
 
-	t.Setenv("NOTIFYBRIDGE_PROJECTS", path)
+	t.Setenv("DEVBRIDGE_PROJECTS", path)
 
 	p := Match("Termux")
 	if p.Emoji != "🔧" {
@@ -71,7 +71,7 @@ licespot-web=🛒:4CAF50:high
 }
 
 func TestMatchNoFile(t *testing.T) {
-	t.Setenv("NOTIFYBRIDGE_PROJECTS", "/nonexistent/path")
+	t.Setenv("DEVBRIDGE_PROJECTS", "/nonexistent/path")
 
 	p := Match("anything")
 	if p.Emoji != DefaultProfile.Emoji {

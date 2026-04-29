@@ -24,14 +24,14 @@ var DefaultProfile = Profile{
 
 // ProjectsPath returns the project profiles config path.
 func ProjectsPath() (string, error) {
-	if env := os.Getenv("NOTIFYBRIDGE_PROJECTS"); env != "" {
+	if env := os.Getenv("DEVBRIDGE_PROJECTS"); env != "" {
 		return env, nil
 	}
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("home directory: %w", err)
 	}
-	return filepath.Join(home, ".notifybridge-projects.conf"), nil
+	return filepath.Join(home, ".devbridge-projects.conf"), nil
 }
 
 // Load reads all project profiles from disk.
