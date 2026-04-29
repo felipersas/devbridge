@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/cfg"
 )
 
 func TestNewSSHNotifier(t *testing.T) {

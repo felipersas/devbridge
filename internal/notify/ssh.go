@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/cfg"
 )
 
 // SSHNotifier sends notifications via SSH to Termux.
