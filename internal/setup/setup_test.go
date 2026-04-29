@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/cfg"
 )
 
 func TestAsk_DefaultValue(t *testing.T) {
@@ -73,8 +73,8 @@ func TestAskBool_YesInput(t *testing.T) {
 
 func TestRunWithReader_FullFlow(t *testing.T) {
 	tmpDir := t.TempDir()
-	confPath := filepath.Join(tmpDir, "notifybridge.conf")
-	t.Setenv("NOTIFYBRIDGE_CONF", confPath)
+	confPath := filepath.Join(tmpDir, "devbridge.conf")
+	t.Setenv("DEVBRIDGE_CONF", confPath)
 
 	input := "192.168.1.1\ntestuser\n2222\nTest Title\ny\n"
 	r := bufio.NewReader(strings.NewReader(input))
@@ -107,8 +107,8 @@ func TestRunWithReader_FullFlow(t *testing.T) {
 
 func TestRunWithReader_DefaultsUsed(t *testing.T) {
 	tmpDir := t.TempDir()
-	confPath := filepath.Join(tmpDir, "notifybridge.conf")
-	t.Setenv("NOTIFYBRIDGE_CONF", confPath)
+	confPath := filepath.Join(tmpDir, "devbridge.conf")
+	t.Setenv("DEVBRIDGE_CONF", confPath)
 
 	// All empty lines → should use defaults
 	input := "\n\n\n\n\n"
@@ -135,8 +135,8 @@ func TestRunWithReader_DefaultsUsed(t *testing.T) {
 
 func TestRunWithReader_SoundNo(t *testing.T) {
 	tmpDir := t.TempDir()
-	confPath := filepath.Join(tmpDir, "notifybridge.conf")
-	t.Setenv("NOTIFYBRIDGE_CONF", confPath)
+	confPath := filepath.Join(tmpDir, "devbridge.conf")
+	t.Setenv("DEVBRIDGE_CONF", confPath)
 
 	input := "\n\n\n\nn\n"
 	r := bufio.NewReader(strings.NewReader(input))

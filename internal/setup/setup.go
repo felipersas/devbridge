@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/felipersas/notifybridge/internal/cfg"
+	"github.com/felipersas/devbridge/internal/cfg"
 )
 
 // Run starts the interactive setup wizard.
@@ -16,7 +16,7 @@ func Run() error {
 
 // RunWithReader accepts an explicit reader for testing.
 func RunWithReader(r *bufio.Reader) error {
-	fmt.Println("NotifyBridge Setup Wizard")
+	fmt.Println("DevBridge Setup Wizard")
 	fmt.Println("=========================")
 	fmt.Println()
 
@@ -53,7 +53,7 @@ func RunWithReader(r *bufio.Reader) error {
 	fmt.Println("Next steps:")
 	fmt.Println("  1. Run scripts/termux-setup.sh on Android")
 	fmt.Println("  2. Copy SSH key: ssh-copy-id -p PORT USER@IP")
-	fmt.Println("  3. Test: notifybridge send 'Hello!'")
+	fmt.Println("  3. Test: devbridge send 'Hello!'")
 	return nil
 }
 
